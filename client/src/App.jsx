@@ -1,14 +1,18 @@
-import { useState } from 'react'
-
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
 
 function App() {
-  return (
-      <div className="flex justify-center items-center h-screen">
-          <header className="text-3xl font-bold underline">
-              Hello Vite + React + Tailwind!
-          </header>
-      </div>
-  )
+    return (
+        <Router>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/" element={<Login />} /> {}
+            </Routes>
+        </Router>
+    );
 }
 
-export default App
+export default App;
