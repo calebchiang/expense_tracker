@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function SignUp() {
+    const navigate = useNavigate();
     const [userDetails, setUserDetails] = useState({
         username: '',
         email: '',
@@ -16,11 +17,55 @@ function SignUp() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('SignUp Attempt:', userDetails);
 
+        const signupEndpoint = 'http://localhost:3000/api/auth/signup';
+        const loginEndpoint = 'http://localhost:3000/api/auth/login';
+
+        try {
+            // Attempt to sign up
+            const signupResponse = await fetch(signupEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userDetails),
+            });
+
+            const signupData = await signupResponse.json();
+
+            if (!signupResponse.ok) {
+                console.error('Signup failed:', signupData.message);
+            } else {
+                console.log('Signup successful:', signupData.message);
+
+                const loginResponse = await fetch(loginEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: userDetails.email,
+                        password: userDetails.password,
+                    }),
+                });
+
+                const loginData = await loginResponse.json();
+
+                if (!loginResponse.ok) {
+                    console.error('Login failed:', loginData.message);
+                } else {
+                    localStorage.setItem('token', loginData.token);
+                    console.log('Logged in successfully, token stored.');
+                    navigate('/dashboard');
+                }
+            }
+        } catch (error) {
+            console.error('Error during sign-up or login:', error);
+        }
     };
+
 
     return (
         <main className="mx-auto flex min-h-screen w-full items-center justify-center bg-gray-900 text-white">

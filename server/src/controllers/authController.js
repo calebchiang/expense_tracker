@@ -26,15 +26,40 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
     console.log('Login request received', req.body);
+
+    // Check if email was provided
+    if (!req.body.email) {
+        console.log('No email provided');
+        return res.status(400).json({ message: "Email is required" });
+    }
+
+    // Check if password was provided
+    if (!req.body.password) {
+        console.log('No password provided');
+        return res.status(400).json({ message: "Password is required" });
+    }
+
     try {
-        const user = await User.findOne({ email: req.body.email });
-        if(!user){
+        const user = await User.findOne({ email: req.body.email.toLowerCase() }); // Ensure email case insensitivity
+
+        if (!user) {
             return res.status(400).json({ message: "User not found" });
+        } else {
+            console.log(`User found for email: ${req.body.email}, attempting password comparison`);
         }
 
         const isValid = await bcrypt.compare(req.body.password, user.password);
-        if (!isValid){
+
+        if (!isValid) {
+            console.log('Invalid password provided');
             return res.status(400).json({ message: "Invalid password" });
+        } else {
+            console.log('Password valid, generating JWT');
+        }
+
+        // Ensure the JWT_SECRET is not undefined
+        if (!process.env.JWT_SECRET) {
+            return res.status(500).json({ message: "Server misconfiguration" });
         }
 
         const token = jwt.sign(
@@ -43,12 +68,15 @@ exports.login = async (req, res) => {
             { expiresIn: '24h' }
         );
 
+        console.log(`JWT generated successfully for user: ${user.email}`);
         res.status(200).json({
             message: "Logged in successfully",
             token: token,
             userId: user._id
         });
-    } catch(error) {
-        res.status(500).json({ message: "Error logging in the user", error: error.message });
+
+    } catch (error) {
+        console.error("Error during login process:", error);
+        res.status(500).json({ message: "Error logging in the user", error: error.toString() });
     }
 };
