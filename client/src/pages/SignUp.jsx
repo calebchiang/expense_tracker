@@ -58,7 +58,7 @@ function SignUp() {
                 } else {
                     localStorage.setItem('token', loginData.token);
                     console.log('Logged in successfully, token stored.');
-                    navigate('/dashboard');
+                    navigate('/bankconnect');
                 }
             }
         } catch (error) {

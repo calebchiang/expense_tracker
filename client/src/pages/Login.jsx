@@ -17,15 +17,12 @@ function Login() {
         }));
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Endpoint for your login API
         const loginEndpoint = 'http://localhost:3000/api/auth/login';
 
         try {
-            // Send login request
             const response = await fetch(loginEndpoint, {
                 method: 'POST',
                 headers: {
@@ -44,12 +41,20 @@ function Login() {
             } else {
                 localStorage.setItem('token', data.token);
                 console.log('Logged in successfully, token stored.');
-                navigate('/dashboard');
+                // Check the isBankConnected status to decide navigation
+                if (data.isBankConnected) {
+                    // If the user has connected their bank, navigate to the dashboard
+                    navigate('/dashboard'); // Adjust '/dashboard' as needed based on your routing
+                } else {
+                    // If the user has not connected their bank, stay on /bankconnect
+                    navigate('/bankconnect');
+                }
             }
         } catch (error) {
             console.error('Error during login:', error);
         }
     };
+
 
 
     return (
