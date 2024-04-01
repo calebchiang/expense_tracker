@@ -40,7 +40,7 @@ exports.login = async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ email: req.body.email.toLowerCase() }); // Ensure email case insensitivity
+        const user = await User.findOne({ email: req.body.email.toLowerCase() });
 
         if (!user) {
             return res.status(400).json({ message: "User not found" });
