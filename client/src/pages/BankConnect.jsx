@@ -47,15 +47,34 @@ function BankConnect() {
         navigate('/login');
     };
 
-    const onSuccess = (publicToken, metadata) =>{
+    const onSuccess = async (publicToken, metadata) => {
+        try {
+            const response = await fetch('http://localhost:3000/api/plaid/exchange_public_token', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ publicToken }),
+            });
 
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Bank account linked successfully:', data);
+            } else {
+                console.error('Failed to exchange public token:', data);
+            }
+        } catch (error) {
+            console.error('Error exchanging public token:', error);
+        }
     };
 
-    const onExit = (err, metadata) =>{
-
-    }
 
 
+    const onExit = (err, metadata) => {
+        console.log('User exited Plaid Link.', err, metadata);
+    };
 
     return (
         <main className="flex min-h-screen w-full items-center justify-center bg-gray-900 text-white">
@@ -64,7 +83,11 @@ function BankConnect() {
                     Looks like you haven't connected to a bank yet...
                 </div>
                 {linkToken ? (
-                    <PlaidLink linkToken={linkToken} />
+                    <PlaidLink
+                        linkToken={linkToken}
+                        onSuccess={onSuccess}
+                        onExit={onExit}
+                    />
                 ) : (
                     <button
                         onClick={handleConnectClick}

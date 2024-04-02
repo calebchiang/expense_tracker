@@ -5,4 +5,6 @@ const plaidController = require('../controllers/plaidController');
 
 router.post('/create_link_token', authenticateToken, plaidController.createLinkToken);
 
+router.post('/exchange_public_token', authenticateToken, plaidController.exchangePublicToken);
+
 module.exports = router;
