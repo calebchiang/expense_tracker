@@ -13,12 +13,12 @@ app.use(express.json());
 
 mongoose.connect(dbURI)
     .then(() => {
-        // Only start the server if the database connects
         app.listen(port, () => {
             console.log(`Server running on port ${port}`);
         });
     })
-    .catch((err) => console.error('Error connecting to MongoDB:', err));
+
+    .catch((err) => console.error('Error connecting to MongoDB:', err.message));
 
 app.get('/', (req, res) => {
     res.send("Hello World");
