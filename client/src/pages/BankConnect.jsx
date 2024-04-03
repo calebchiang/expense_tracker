@@ -82,19 +82,20 @@ function BankConnect() {
                 <div className="text-center text-2xl font-medium">
                     Looks like you haven't connected to a bank yet...
                 </div>
-                {linkToken ? (
+                {/* The Connect to a Bank button will trigger the handleConnectClick function */}
+                <button
+                    onClick={handleConnectClick}
+                    className="w-full transform rounded-md bg-blue-600 py-2 font-bold duration-300 hover:bg-blue-400"
+                >
+                    Connect to a Bank
+                </button>
+                {/* Once linkToken is set, the PlaidLink component is invoked and should automatically open the Plaid Link flow */}
+                {linkToken && (
                     <PlaidLink
                         linkToken={linkToken}
                         onSuccess={onSuccess}
                         onExit={onExit}
                     />
-                ) : (
-                    <button
-                        onClick={handleConnectClick}
-                        className="w-full transform rounded-md bg-blue-600 py-2 font-bold duration-300 hover:bg-blue-400"
-                    >
-                        Connect to a Bank
-                    </button>
                 )}
                 <button
                     onClick={handleSignOutClick}
@@ -105,6 +106,7 @@ function BankConnect() {
             </div>
         </main>
     );
+
 }
 
 export default BankConnect;
