@@ -5,8 +5,6 @@ const mongoose = require('mongoose');
 const port = 3000;
 const dbURI = process.env.MONGODB_URL;
 const cors = require('cors');
-const authenticateToken = require('./src/middleware/authenticateToken');
-const plaidController = require('./src/controllers/plaidController');
 
 app.use(cors());
 app.use(express.json());
@@ -31,4 +29,6 @@ app.use('/api/auth', authRoutes);
 const plaidRoutes = require('./src/routes/plaid');
 app.use('/api/plaid', plaidRoutes);
 
+const transactionRoutes = require('./src/routes/transactions');
+app.use('/api/transactions', transactionRoutes);
 

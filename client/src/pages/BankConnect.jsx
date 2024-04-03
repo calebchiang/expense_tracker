@@ -89,7 +89,6 @@ function BankConnect() {
                 >
                     Connect to a Bank
                 </button>
-                {/* Once linkToken is set, the PlaidLink component is invoked and should automatically open the Plaid Link flow */}
                 {linkToken && (
                     <PlaidLink
                         linkToken={linkToken}
