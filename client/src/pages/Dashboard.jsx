@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import BarGraph from '../components/BarGraph';
 
 function Dashboard() {
     const [transactions, setTransactions] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/transactions/fetch_monthly_transactions', {
+        fetch('http://localhost:3000/api/transactions/fetch_yearly_transactions', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -19,6 +20,7 @@ function Dashboard() {
 
     return (
         <div className="mx-auto w-full max-w-4xl py-8 px-4">
+            <BarGraph />
             <table className="w-full">
                 <thead className="text-left">
                 <tr className="border-b-2 border-indigo-500">
