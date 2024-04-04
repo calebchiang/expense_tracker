@@ -4,7 +4,7 @@ function Dashboard() {
     const [transactions, setTransactions] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/transactions/fetch_transactions', {
+        fetch('http://localhost:3000/api/transactions/fetch_monthly_transactions', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
