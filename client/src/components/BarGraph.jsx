@@ -35,7 +35,7 @@ const BarGraph = () => {
             borderWidth: 1,
             hoverBackgroundColor: '#3F51B5',
             hoverBorderColor: '#303F9F',
-            data: Array(12).fill(0), // Initialize all months with 0 spending
+            data: Array(12).fill(0),
         }],
     });
 
@@ -45,33 +45,32 @@ const BarGraph = () => {
                 const response = await fetch('http://localhost:3000/api/transactions/fetch_yearly_transactions', {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`, // Use the stored token for authorization
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                const { transactions } = await response.json(); // Destructure to directly get transactions array
+                const { transactions } = await response.json();
 
                 // Initialize monthly spendings object
                 const monthlySpendings = Array(12).fill(0);
 
                 transactions.forEach(({ date, amount }) => {
-                    const monthIndex = new Date(date).getMonth(); // getMonth() returns 0-11
-                    monthlySpendings[monthIndex] += amount; // Sum up amounts for each month
+                    const transactionDate = new Date(date + 'Z'); // Appending 'Z' to indicate UTC time
+                    const monthIndex = transactionDate.getUTCMonth();
+                    monthlySpendings[monthIndex] += amount;
                 });
 
-                // Update state with processed data for the chart
                 setTransactionData(prevData => ({
                     ...prevData,
                     datasets: [{
                         ...prevData.datasets[0],
-                        data: monthlySpendings, // Array of summed amounts for each month
+                        data: monthlySpendings,
                     }],
                 }));
             } catch (error) {
                 console.error('Failed to fetch transaction data:', error);
-                // Handle error here
             }
         };
 
@@ -79,8 +78,8 @@ const BarGraph = () => {
     }, []);
 
     return (
-        <div>
-            <h2 style={{  textAlign: 'center', marginBottom: '20px' }}>Yearly Spending Overview</h2>
+        <div className="bg-white text-black p-4 rounded-sm w-full inline-block border-1 border-black shadow-lg">
+            <h2 className="text-sm font-semibold text-left mb-4">Yearly Spending Overview</h2>
             <Bar
                 data={transactionData}
                 options={{
