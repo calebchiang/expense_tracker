@@ -14,6 +14,7 @@ const YearlyExpenses = () => {
         })
             .then(response => response.json())
             .then(data => {
+                console.log('Raw response data:', data);
                 if (data.transactions && Array.isArray(data.transactions)) {
                     const total = data.transactions.reduce((acc, transaction) => acc + transaction.amount, 0);
                     setTotalYearlyExpenses(total);

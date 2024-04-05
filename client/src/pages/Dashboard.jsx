@@ -3,6 +3,7 @@ import BarGraph from '../components/BarGraph';
 import Sidebar from '../components/Sidebar';
 import YearlyExpenses from '../components/YearlyExpenses';
 import MonthlyExpenses from '../components/MonthlyExpenses';
+import PieChart from '../components/PieChart';
 
 function Dashboard() {
     const [transactions, setTransactions] = useState([]);
@@ -14,7 +15,12 @@ function Dashboard() {
                 <YearlyExpenses />
                 <MonthlyExpenses />
             </div>
-            <BarGraph />
+            <div className="mb-4">
+                <BarGraph />
+            </div>
+            <div className="mt-4">
+                <PieChart />
+            </div>
         </div>
     );
 }
