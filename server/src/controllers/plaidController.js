@@ -43,6 +43,8 @@ exports.exchangePublicToken = async (req, res) => {
             itemId: itemId,
         });
 
+        await User.findByIdAndUpdate(req.user.userId, { isBankConnected: true });
+
         res.status(200).json({ message: 'Bank account linked successfully.' });
     } catch (error) {
         console.error('Error exchanging public token:', error.message);

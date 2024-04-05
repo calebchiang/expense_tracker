@@ -94,7 +94,6 @@ exports.fetchYearlyTransactionData = async (req, res) => {
             end_date: endDate,
         });
 
-        // Filter for transactions with negative amounts and format the transactions
         const spendingTransactions = response.data.transactions.filter(t => t.amount > 0);
         const formattedTransactions = spendingTransactions.map(t => ({
             date: t.date,

@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
     res.send("Hello World");
 });
 
-// Include routes
+// Routes
 const authRoutes = require('./src/routes/auth');
 app.use('/api/auth', authRoutes);
 

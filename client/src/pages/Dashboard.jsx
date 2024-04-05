@@ -1,46 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import BarGraph from '../components/BarGraph';
+import Sidebar from '../components/Sidebar';
 
 function Dashboard() {
     const [transactions, setTransactions] = useState([]);
 
-    useEffect(() => {
-        fetch('http://localhost:3000/api/transactions/fetch_yearly_transactions', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                setTransactions(data.transactions);
-            })
-            .catch(error => console.error('Error fetching transactions:', error));
-    }, []);
-
     return (
         <div className="mx-auto w-full max-w-4xl py-8 px-4">
+            <Sidebar className="w-64 h-screen bg-gray-800 text-white fixed inset-y-0 left-0" />
             <BarGraph />
-            <table className="w-full">
-                <thead className="text-left">
-                <tr className="border-b-2 border-indigo-500">
-                    <th className="pb-2">Date</th>
-                    <th className="pb-2">Name</th>
-                    <th className="pb-2">Amount</th>
-                    <th className="pb-2">Category</th>
-                </tr>
-                </thead>
-                <tbody>
-                {transactions.map((transaction, index) => (
-                    <tr key={index}>
-                        <td className="py-2">{transaction.date}</td>
-                        <td>{transaction.name}</td>
-                        <td>{transaction.amount}</td>
-                        <td>{transaction.category}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
         </div>
     );
 }
